@@ -18,6 +18,17 @@ class PhoneInfo extends Component {
         onRemove(info.id); 
     }
 
+    handleUpdate = (id, data) => {
+        const { information } = this.state;
+        this.setState({
+            imformation: information.map (
+                info => id === info.id 
+                ? {...info, ...data}
+                :info
+            )
+        })
+    }
+
     render() {
         const style = {
             border: '1px solid black',
