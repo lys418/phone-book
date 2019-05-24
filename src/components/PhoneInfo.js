@@ -24,7 +24,9 @@ class PhoneInfo extends Component {
         onRemove(info.id); 
     }
 
+    // editing 값을 반전시킴 (true => false, fasle => true) / text => input text로 바뀌도록 설정값
     handleToggleEdit = () => {
+        console.log("toggleEdit!!")
         const { editing } = this.state;
         this.setState({ editing: !editing });
     }
@@ -36,9 +38,11 @@ class PhoneInfo extends Component {
         });
     }
 
+    // 업데이트 후 호출되는 함수
     componentDidUpdate(prevProps, prevState) {
         const { info, onUpdate} = this.props;
-        if(!prevProps.editing && this.state.editing){
+        if(!prevState.editing && this.state.editing){
+            console.log("1")
             this.setState({
                 name: info.name,
                 phone: info.phone
@@ -46,22 +50,14 @@ class PhoneInfo extends Component {
         }
 
         if(prevState.editing && !this.state.editing) {
+            console.log("2")
+            console.log(this.state)
             onUpdate(info.id, {
+                id: info.id,
                 name: this.state.name,
                 phone: this.state.phone
             });
         }
-    }
-
-    handleUpdate = (id, data) => {
-        const { information } = this.state;
-        this.setState({
-            imformation: information.map (
-                info => id === info.id 
-                ? {...info, ...data}
-                :info
-            )
-        })
     }
 
     render() {
@@ -76,11 +72,25 @@ class PhoneInfo extends Component {
         //수정모드
         if(editing) {
             return (
-                <div>
-                    <input 
-                        value={this.state.name}
-                        name="name"
-                    />
+                <div style={style}>
+                    <div>
+                        <input 
+                            value={this.state.name}
+                            name="name"
+                            placeholder="이름"
+                            onChange={this.handleChange}
+                        />
+                    </div>
+                    <div>
+                        <input 
+                            value={this.state.phone}
+                            name="phone"
+                            placeholder="전화번호"
+                            onChange={this.handleChange}
+                        />
+                    </div>
+                    <button onClick={this.handleToggleEdit}>적용</button>
+                    <button onClick={this.handleRemove}>삭제</button>
                 </div>
             );
         }

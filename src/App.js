@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import PhoneForm from  './components/PhoneForm'
 import PhoneInfoList from './components/PhoneInfoList'
 
@@ -34,16 +33,28 @@ class App extends Component {
     })
   }
 
+  handleUpdate = (id, data) => {
+    const { information } = this.state;
+    this.setState({
+        information: information.map(
+            info => id === info.id 
+            ? {...info, ...data}
+            : info
+        )
+    })
+  }
+
   render(){
-    // const { information } = this.state;
+    const { information } = this.state;
     return(
       <div>
         <PhoneForm 
           onCreate={this.handleCreate}
         />
         <PhoneInfoList 
-          data={this.state.information} 
+          data={information} 
           onRemove={this.handleRemove}
+          onUpdate={this.handleUpdate}
         />
         {/* {JSON.stringify(information)} */}
       </div>
