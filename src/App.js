@@ -16,7 +16,24 @@ class App extends Component {
         name: '홍길동',
         phone: '010-0000-0001'
       }
-    ]
+    ],
+    keywordName: '',
+    keywordPhone: '',
+    keywordGubun: ''
+  }
+
+  handleChange = (e) => {
+    this.setState({
+      keywordName: e.target.value,
+      keywordGubun: 'N'
+    })
+  }
+
+  handleChangePhone = (e) => {
+    this.setState({
+      keywordPhone: e.target.value,
+      keywordGubun: 'P'
+    })
   }
 
   handleCreate = (data) => {
@@ -45,14 +62,38 @@ class App extends Component {
   }
 
   render(){
-    const { information } = this.state;
+    const { information, keywordName, keywordPhone, keywordGubun } = this.state;
+    console.log(keywordGubun);
+    console.log('');
+    const filteredList = information.filter(
+      keywordGubun === 'N' ? 
+      info => info.name.indexOf(keywordName) !== -1
+      :
+      info => info.phone.indexOf(keywordPhone) !== -1
+    );
+    
     return(
       <div>
         <PhoneForm 
           onCreate={this.handleCreate}
         />
+        <p>
+          <input 
+            placeholder="검색 할 이름을 입력하세요..."
+            onChange={this.handleChange}
+            value={keywordName}
+          />
+        </p>
+        <p>
+          <input 
+            placeholder="검색할 전화번호를 입력하세요..."
+            onChange={this.handleChangePhone}
+            value={keywordPhone}
+          />
+          <input type="hidden" value={keywordGubun} />
+        </p>
         <PhoneInfoList 
-          data={information} 
+          data={filteredList} 
           onRemove={this.handleRemove}
           onUpdate={this.handleUpdate}
         />
